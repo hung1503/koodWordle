@@ -20,49 +20,60 @@ type Stats struct {
 func main() {
 	startTheGame, number := checkDigits()
 	if startTheGame {
+		os.Stdout.WriteString("\x1b[3;J\x1b[H\x1b[2J")
 		fmt.Println("----Welcome to Wordle----")
 		fmt.Println("Enter your username:")
 		scanner := bufio.NewScanner(os.Stdin)
 
 		for {
-			if scanner.Scan() {
-				// Inputing username
-				username := strings.TrimSpace(scanner.Text())
-				if len(username) == 0 {
+		
+			// Inputing username
+			username := strings.TrimSpace(scanner.Text())
+			USERNAMELOOP:
+			for{
+				if scanner.Scan(){
+					username = strings.TrimSpace(scanner.Text())
+					if len(username) == 0 {
 					fmt.Println("Invalid username! Please try again")
-					if scanner.Scan() {
-
-					}
-				} 
-				fmt.Println("Hi", username)
-				
-				playGame(scanner, number)
-				STATSLOOP		
-				for {
-					fmt.Println("Do you want to see your stats? (yes/no)")
-					if scanner.Scan() {
-						answer := strings.TrimSpace(scanner.Text())
-						if answer == "yes" || answer == 'y' {
-							csvFile := handleCSVFile()
-							gameCount, winCount, aveAttemps :=checkStats(csvFile, username)
-							fmt.Println("Stat for " + username)
-							fmt.Println("Game played: " + gameCount)
-							fmt.Println("Game won: " + winCount)
-							fmt.Println("Average attempts per game: " + aveAttemps)
-						} else {
-							break STATSLOOP
-						}
 					} else {
-						fmt.Println("Exiting program...")
-						os.Exit(0)
+						break USERNAMELOOP
 					}
+				} else {
+					fmt.Println("Exiting program...")
+					os.Exit(0)
 				}
-			
-			} else {
-				fmt.Println("Exiting program...")
-				os.Exit(0)
 			}
-		}
+			
+			fmt.Println("Hi", username)
+			csvFile := handleCSVFile()
+			matchStats := playGame(scanner, number, username)
+			err := saveToCSVFile(matchStats, csvFile)
+			if err != nil {
+				fmt.Println("Error with saving game stat in CSV file")
+			}
+			STATSLOOP:	
+			for {
+				fmt.Println("Do you want to see your stats? (yes/no)")
+				if scanner.Scan() {
+					answer := strings.TrimSpace(scanner.Text())
+					if answer == "yes" || answer == "y" {
+						// csvFile := handleCSVFile()
+						gameCount, winCount, aveAttemps :=checkStats(csvFile, username)
+						fmt.Println("Stat for", username)
+						fmt.Println("Game played:", gameCount)
+						fmt.Println("Game won:", winCount)
+						fmt.Println("Average attempts per game:", aveAttemps)
+					} else {
+						break STATSLOOP
+					}
+				} else {
+					fmt.Println("Exiting program...")
+					os.Exit(0)
+				}
+			}
+			fmt.Println("Press Enter to exit...")
+			fmt.Scanln()
+		} 
 	}
 }
 
@@ -136,37 +147,43 @@ func secretWord(number int) (string, []string) {
 		fmt.Println("Error when reading wordle file:", err)
 	}
 	wordleArr := strings.Split(string(content), "\n")
-	return wordleArr[number + 1], wordleArr
+	return wordleArr[number-1], wordleArr
 }
 
-func playGame(scanner *bufio.Scanner, number int) {
+func playGame(scanner *bufio.Scanner, number int, username string) Stats {
 	wordle, wordlist := secretWord(number)
 	attempts := 6
 	alphabet := []string{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
 	failedString := ""
 	correctMatch := false
-	fmt.Print("Enter your guess. 5-LETTER word only: ")
-		GAMELOOP:
-		for i:=attempts; i>0; i--{
-			if scanner.Scan(){
-				fmt.Print("Enter your guess. 5-LETTER word only: ")
-				guess:= strings.TrimSpace(scanner.Text())
-				isValid := isGuessValid(guess, wordlist)
-				if !isValid {
-					i = i+1
+	GAMELOOP:
+	for i:=6; i>0; i--{
+		fmt.Print("Enter your guess. 5-LETTER word only: ")
+		if scanner.Scan(){
+			guess:= strings.TrimSpace(scanner.Text())
+			isValid := isGuessValid(guess, wordlist)
+			if !isValid {
+				i = i+1
+			} else {
+				failedString, correctMatch, alphabet = checkWordle(guess, wordle, alphabet)
+				if correctMatch {
+					attempts = i
+					fmt.Println("Congratulations! You've guessd the word correctly")
+					break GAMELOOP
 				} else {
-					failedString, correctMatch, alphabet = checkWordle(guess, wordle, alphabet)
-					if correctMatch {
-						fmt.Println("Congratulations! You've guessd the word correctly")
-						break GAMELOOP
-					} else {
-						fmt.Println("Feedback: " + failedString)
-						fmt.Println("Remaining letters: ", alphabet)
-						fmt.Println("Attemps remaining: ", (i-1))
-					}
-					
+					fmt.Println("Feedback: " + failedString)
+					fmt.Println("Remaining letters: ", alphabet)
+					fmt.Println("Attemps remaining: ", (i-1))
 				}
+				
+			}
 		}
+	}
+	fmt.Println("The wordle is " + wordle)
+	if correctMatch {
+		return Stats{username, wordle, strconv.Itoa(attempts), "win"}
+	} else {
+		return Stats{username, wordle, strconv.Itoa(attempts), "loss"}
 	}
 }
 
@@ -177,10 +194,12 @@ func isGuessValid(input string, wordlist []string) (bool) {
 		fmt.Println("The word must exactly 5 letters long")
 		isValidInput = false
 	} else if checkAlphabet {
+		CHECKALPHABETLOOP:
 		for _, r:=range input {
 			if !(r >= 'a' && r <= 'z') {
 				fmt.Println("The word must only contains lowercase letters")
 				isValidInput = false
+				break CHECKALPHABETLOOP
 			} 
 		}
 	} else if slices.Contains(wordlist, input) {
@@ -205,23 +224,26 @@ func checkWordle(input string, wordle string, alphabet []string) (string, bool, 
 		correctMatch = true
 		fmt.Println()
 	} else {
-		for i:=0; i<=len(wordleArr); i++ {
-			for j:=0; j<=len(inputArr); j++ {
-				if strings.Contains(wordle, inputArr[j]) {
-					if inputArr[j] == wordleArr[j] {
-						testStr += Green + strings.toUpper(inputArr[j]) + Reset
-					} else {
-						testStr += Yellow + strings.toUpper(inputArr[j]) + Reset
-					}
+		for j:=0; j<len(inputArr); j++ {
+			if strings.Contains(wordle, inputArr[j]) {
+				if inputArr[j] == wordleArr[j] {
+					testStr += Green + strings.ToUpper(inputArr[j]) + Reset
 				} else {
-					testStr += White + strings.toUpper(inputArr[j]) + Reset
-					indexInAlphabet := slice.Index(alphabet, strings.toUpper(inputArr[j]))
-					if indexInAlphabet >=0 {
-						alphabet = append(alphabet[:indexInAlphabet], alphabet[indexInAlphabet+1:]...)
-					}
+					testStr += Yellow + strings.ToUpper(inputArr[j]) + Reset
+				}
+			} else {
+				testStr += White + strings.ToUpper(inputArr[j]) + Reset
+				indexInAlphabet := slices.Index(alphabet, strings.ToUpper(inputArr[j]))
+				if indexInAlphabet >=0 {
+					alphabet = append(alphabet[:indexInAlphabet], alphabet[indexInAlphabet+1:]...)
 				}
 			}
 		}
 	}
 	return testStr, correctMatch, alphabet
+}
+
+func saveToCSVFile(stat Stats, csvFile ) error {
+	
+	return os.WriteFile("stats.csv", []byte(content), 0644)
 }

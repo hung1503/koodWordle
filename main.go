@@ -10,13 +10,6 @@ import (
 	// "math/rand"
 )
 
-type Stats struct {
-	Username string
-	SecretWord string
-	NumOfAttempts string
-	WinLose string
-}
-
 func main() {
 	startTheGame, number := checkDigits()
 	if startTheGame {
@@ -48,6 +41,7 @@ func main() {
 			csvFile := handleCSVFile()
 			matchStats := playGame(scanner, number, username)
 			err := saveToCSVFile(matchStats, csvFile)
+			csvFile = append(csvFile, matchStats)
 			if err != nil {
 				fmt.Println("Error with saving game stat in CSV file")
 			}
@@ -63,6 +57,7 @@ func main() {
 						fmt.Println("Game played:", gameCount)
 						fmt.Println("Game won:", winCount)
 						fmt.Println("Average attempts per game:", aveAttemps)
+						break STATSLOOP
 					} else {
 						break STATSLOOP
 					}
@@ -72,7 +67,14 @@ func main() {
 				}
 			}
 			fmt.Println("Press Enter to exit...")
-			fmt.Scanln()
+			for {
+				if scanner.Scan(){
+					input := scanner.Text()
+					if input == "" {
+						os.Exit(0)
+					} 
+				} 
+			}
 		} 
 	}
 }
@@ -94,32 +96,31 @@ func checkDigits() (bool, int) {
 	return isPass, number
 }
 
-func handleCSVFile() []Stats {
+func handleCSVFile() [][]string {
 	content, err := os.ReadFile("stats.csv")
 	if err != nil {
 		fmt.Println("Error when reading stat file:", err)
 	}
 	statsArr := strings.Split(string(content), "\n")
-	filteredStatsArr := []Stats{}
+	filteredStatsArr := [][]string{}
 	for _, value :=range statsArr {
 		oneRow := strings.Split(value, ",")
-		stat := Stats{oneRow[0], oneRow[1], oneRow[2], oneRow[3]}
-		filteredStatsArr = append(filteredStatsArr, stat)
+		filteredStatsArr = append(filteredStatsArr, oneRow)
 	}	
 	return filteredStatsArr
 }
 
-func checkStats(filteredStatsArr []Stats, username string) (int, int, float64 ) {
+func checkStats(filteredStatsArr [][]string , username string) (int, int, float64 ) {
 	gameCount := 0
 	winCount := 0
 	var aveAttemps float64 = 0
 	for _, stat := range filteredStatsArr {
-		if stat.Username == username {
+		if stat[0] == username {
 			gameCount++
-			if stat.WinLose == "win"{
+			if stat[3] == "win"{
 				winCount++
 			}
-			attempts, _:=strconv.ParseFloat(stat.NumOfAttempts, 64)
+			attempts, _:=strconv.ParseFloat(stat[2], 64)
 			aveAttemps+=attempts
 		}
 	} 
@@ -150,14 +151,14 @@ func secretWord(number int) (string, []string) {
 	return wordleArr[number-1], wordleArr
 }
 
-func playGame(scanner *bufio.Scanner, number int, username string) Stats {
+func playGame(scanner *bufio.Scanner, number int, username string) []string {
 	wordle, wordlist := secretWord(number)
-	attempts := 6
+	attempts := 1
 	alphabet := []string{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
 	failedString := ""
 	correctMatch := false
 	GAMELOOP:
-	for i:=6; i>0; i--{
+	for i:=5; i>=0; i--{
 		fmt.Print("Enter your guess. 5-LETTER word only: ")
 		if scanner.Scan(){
 			guess:= strings.TrimSpace(scanner.Text())
@@ -167,13 +168,13 @@ func playGame(scanner *bufio.Scanner, number int, username string) Stats {
 			} else {
 				failedString, correctMatch, alphabet = checkWordle(guess, wordle, alphabet)
 				if correctMatch {
-					attempts = i
+					attempts = 6-i
 					fmt.Println("Congratulations! You've guessd the word correctly")
 					break GAMELOOP
 				} else {
 					fmt.Println("Feedback: " + failedString)
 					fmt.Println("Remaining letters: ", alphabet)
-					fmt.Println("Attemps remaining: ", (i-1))
+					fmt.Println("Attemps remaining: ", i)
 				}
 				
 			}
@@ -181,9 +182,9 @@ func playGame(scanner *bufio.Scanner, number int, username string) Stats {
 	}
 	fmt.Println("The wordle is " + wordle)
 	if correctMatch {
-		return Stats{username, wordle, strconv.Itoa(attempts), "win"}
+		return []string{username, wordle, strconv.Itoa(attempts), "win"}
 	} else {
-		return Stats{username, wordle, strconv.Itoa(attempts), "loss"}
+		return []string{username, wordle, strconv.Itoa(attempts), "loss"}
 	}
 }
 
@@ -243,7 +244,16 @@ func checkWordle(input string, wordle string, alphabet []string) (string, bool, 
 	return testStr, correctMatch, alphabet
 }
 
-func saveToCSVFile(stat Stats, csvFile ) error {
-	
-	return os.WriteFile("stats.csv", []byte(content), 0644)
+func saveToCSVFile(stat []string, csvFile [][]string) error {
+	f, err := os.OpenFile("stats.csv", os.O_APPEND|os.O_WRONLY, 0600)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+	content := strings.Join(stat, ",")
+	 _, er := f.WriteString("\n"+content)
+	 if er != nil {
+		panic(err)
+	}
+	return er
 }

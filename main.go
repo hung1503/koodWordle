@@ -53,7 +53,7 @@ func main() {
 					fmt.Println("Error with saving game stat in CSV file")
 				}
 			
-				fmt.Print("Do you want to see your stats? (yes/no):")
+				fmt.Print("Do you want to see your stats? (yes/no): ")
 				if scanner.Scan() {
 					answer := strings.TrimSpace(scanner.Text())
 					if answer == "yes" || answer == "y" {

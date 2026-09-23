@@ -54,13 +54,13 @@ func main() {
 				}
 				STATSLOOP:	
 				for {
-					fmt.Println("Do you want to see your stats? (yes/no)")
+					fmt.Print("Do you want to see your stats? (yes/no):")
 					if scanner.Scan() {
 						answer := strings.TrimSpace(scanner.Text())
 						if answer == "yes" || answer == "y" {
 							// csvFile := handleCSVFile()
 							gameCount, winCount, aveAttemps :=user.CheckStats(csvFile, username)
-							fmt.Println("Stat for", username)
+							fmt.Println("Stat for " + username + ":" )
 							fmt.Println("Game played:", gameCount)
 							fmt.Println("Game won:", winCount)
 							fmt.Println("Average attempts per game:", aveAttemps)

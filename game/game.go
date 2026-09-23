@@ -30,7 +30,7 @@ func PlayGame(scanner *bufio.Scanner, number int, username string) []string {
 	alphabet := []string{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
 	failedString := ""
 	correctMatch := false
-	fmt.Print("Welcome to Wordle! Guess the 5-letter word.")
+	fmt.Print("Welcome to Wordle! Guess the 5-letter word.\n")
 	GAMELOOP:
 	for i:=5; i>=0; i--{
 		fmt.Print("Enter your guess: ")
@@ -51,16 +51,17 @@ func PlayGame(scanner *bufio.Scanner, number int, username string) []string {
 					for _, c :=range alphabet {
 						fmt.Print(" "+c)
 					}
-					fmt.Println("\nAttemps remaining: ", i)
+					fmt.Println("\nAttempts remaining: ", i)
 				}
 				
 			}
 		}
 	}
-	fmt.Println("The wordle is " + wordle)
+	
 	if correctMatch {
 		return []string{username, wordle, strconv.Itoa(attempts), "win"}
 	} else {
+		fmt.Println("Game over. The correct word was: " + wordle)
 		return []string{username, wordle, strconv.Itoa(attempts), "loss"}
 	}
 }
@@ -109,7 +110,6 @@ func CheckWordle(input string, wordle string, alphabet []string) (string, bool, 
 	if input == wordle {
 		testStr = wordle
 		correctMatch = true
-		fmt.Println()
 	} else {
 		for j:=0; j<len(inputArr); j++ {
 			if strings.Contains(wordle, inputArr[j]) {

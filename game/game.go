@@ -46,10 +46,10 @@ func PlayGame(scanner *bufio.Scanner, number int, username string) []string {
 					fmt.Println("Congratulations! You've guessed the word correctly.")
 					break GAMELOOP
 				} else {
-					fmt.Println(" Feedback: " + failedString)
+					fmt.Println("  Feedback: " + failedString)
 					fmt.Print("Remaining letters:")
 					for _, c :=range alphabet {
-						fmt.Print(" "+c)
+						fmt.Print(c + " ")
 					}
 					fmt.Println("\nAttempts remaining: ", i)
 				}

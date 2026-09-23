@@ -21,9 +21,6 @@ func CheckDigits() (bool, int) {
 	if err!=nil {
 		fmt.Println("Invalid command-line argument. Please launch with a valid number.")
 		return false, -1
-	} else if number > 14854 {
-		fmt.Println("Invalid number! Enter smaller number")
-		return false, -1
 	}
 	
 	return true, number

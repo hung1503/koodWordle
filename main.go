@@ -14,53 +14,64 @@ func main() {
 	startTheGame, number := io.CheckDigits()
 	if startTheGame {
 		// os.Stdout.WriteString("\x1b[3;J\x1b[H\x1b[2J")
-		fmt.Println("Enter your username:")
+		fmt.Print("Enter your username: ")
 		scanner := bufio.NewScanner(os.Stdin)
-
-		for {
 		
+		for {
+			gameStart:=true
+			enterUsername := true
+			username:=""
 			// Inputing username
-			username := strings.TrimSpace(scanner.Text())
-			USERNAMELOOP:
-			for{
-				if scanner.Scan(){
-					username = strings.TrimSpace(scanner.Text())
-					if len(username) == 0 {
-					fmt.Println("Invalid username! Please try again")
+			if number > 14854 || number < 0 {
+				fmt.Print("Invalid word number.\n")
+				gameStart=false
+				enterUsername= false
+			}
+			if enterUsername {
+				username = strings.TrimSpace(scanner.Text())
+				USERNAMELOOP:
+				for{
+					if scanner.Scan(){
+						username = strings.TrimSpace(scanner.Text())
+						if len(username) == 0 {
+						fmt.Println("Invalid username! Please try again")
+						} else {
+							break USERNAMELOOP
+						}
 					} else {
+						gameStart=false
 						break USERNAMELOOP
 					}
-				} else {
-					fmt.Println("Exiting program...")
-					os.Exit(0)
 				}
 			}
-			csvFile := io.HandleCSVFile()
-			matchStats := game.PlayGame(scanner, number, username)
-			err := io.SaveToCSVFile(matchStats, csvFile)
-			csvFile = append(csvFile, matchStats)
-			if err != nil {
-				fmt.Println("Error with saving game stat in CSV file")
-			}
-			STATSLOOP:	
-			for {
-				fmt.Println("Do you want to see your stats? (yes/no)")
-				if scanner.Scan() {
-					answer := strings.TrimSpace(scanner.Text())
-					if answer == "yes" || answer == "y" {
-						// csvFile := handleCSVFile()
-						gameCount, winCount, aveAttemps :=user.CheckStats(csvFile, username)
-						fmt.Println("Stat for", username)
-						fmt.Println("Game played:", gameCount)
-						fmt.Println("Game won:", winCount)
-						fmt.Println("Average attempts per game:", aveAttemps)
-						break STATSLOOP
+			if gameStart {	
+				csvFile := io.HandleCSVFile()
+				matchStats := game.PlayGame(scanner, number, username)
+				err := io.SaveToCSVFile(matchStats, csvFile)
+				csvFile = append(csvFile, matchStats)
+				if err != nil {
+					fmt.Println("Error with saving game stat in CSV file")
+				}
+				STATSLOOP:	
+				for {
+					fmt.Println("Do you want to see your stats? (yes/no)")
+					if scanner.Scan() {
+						answer := strings.TrimSpace(scanner.Text())
+						if answer == "yes" || answer == "y" {
+							// csvFile := handleCSVFile()
+							gameCount, winCount, aveAttemps :=user.CheckStats(csvFile, username)
+							fmt.Println("Stat for", username)
+							fmt.Println("Game played:", gameCount)
+							fmt.Println("Game won:", winCount)
+							fmt.Println("Average attempts per game:", aveAttemps)
+							break STATSLOOP
+						} else {
+							break STATSLOOP
+						}
 					} else {
-						break STATSLOOP
+						fmt.Println("Exiting program...")
+						os.Exit(0)
 					}
-				} else {
-					fmt.Println("Exiting program...")
-					os.Exit(0)
 				}
 			}
 			fmt.Println("Press Enter to exit...")

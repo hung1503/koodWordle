@@ -60,7 +60,7 @@ func main() {
 						if answer == "yes" || answer == "y" {
 							// csvFile := handleCSVFile()
 							gameCount, winCount, aveAttemps :=user.CheckStats(csvFile, username)
-							fmt.Println("Stat for " + username + ":" )
+							fmt.Println("Stats for " + username + ":" )
 							fmt.Println("Game played:", gameCount)
 							fmt.Println("Game won:", winCount)
 							fmt.Printf("Average attempts per game: %.2f\n", aveAttemps)

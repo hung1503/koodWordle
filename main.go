@@ -66,10 +66,10 @@ func main() {
 							fmt.Println("Average attempts per game:", aveAttemps)
 							break OUTERLOOP
 						} else {
-							break OUTERLOOP
+							return
 						}
 					} else {
-						break OUTERLOOP
+						return
 					}
 				} 
 			}

@@ -14,7 +14,6 @@ func main() {
 	startTheGame, number := io.CheckDigits()
 	if startTheGame {
 		os.Stdout.WriteString("\x1b[3;J\x1b[H\x1b[2J")
-		fmt.Println("----Welcome to Wordle----")
 		fmt.Println("Enter your username:")
 		scanner := bufio.NewScanner(os.Stdin)
 
@@ -36,8 +35,6 @@ func main() {
 					os.Exit(0)
 				}
 			}
-			
-			fmt.Println("Hi", username)
 			csvFile := io.HandleCSVFile()
 			matchStats := game.PlayGame(scanner, number, username)
 			err := io.SaveToCSVFile(matchStats, csvFile)

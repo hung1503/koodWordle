@@ -16,7 +16,7 @@ func main() {
 		// os.Stdout.WriteString("\x1b[3;J\x1b[H\x1b[2J")
 		fmt.Print("Enter your username: ")
 		scanner := bufio.NewScanner(os.Stdin)
-		
+		OUTERLOOP:
 		for {
 			gameStart:=true
 			enterUsername := true
@@ -26,7 +26,7 @@ func main() {
 				fmt.Print("Invalid word number.\n")
 				gameStart=false
 				enterUsername= false
-				return
+				break OUTERLOOP
 			}
 			if enterUsername {
 				USERNAMELOOP:
@@ -74,16 +74,17 @@ func main() {
 					}
 				}
 			}
-			fmt.Println("Press Enter to exit...")
-			for {
-				if scanner.Scan(){
-					input := scanner.Text()
-					if input == ""  || input == "\n"{
-						os.Exit(0)
-					} 
-				} 
-			}
+			
 		} 
+		fmt.Println("Press Enter to exit...")
+		for {
+			if scanner.Scan(){
+				input := scanner.Text()
+				if input == ""  || input == "\n"{
+					os.Exit(0)
+				} 
+			} 
+		}
 	}
 }
 

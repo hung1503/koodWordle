@@ -1,0 +1,9 @@
+$> cat actual_stdout
+Enter your username: Welcome to Wordle! Guess the 5-letter word.
+Enter your guess: Word not in list. Please enter a valid word.
+Enter your guess: 
+
+$> cat expected_stdout
+Enter your username: Welcome to Wordle! Guess the 5-letter word.
+Enter your guess: Word not in list. Please enter a valid word.
+Enter your guess:

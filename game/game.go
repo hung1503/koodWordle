@@ -87,7 +87,7 @@ func IsGuessValid(input string, wordlist []string) (bool) {
 		CHECKALPHABETLOOP:
 		for _, r:=range input {
 			if !(r >= 'a' && r <= 'z') {
-				fmt.Println("Your guess must only contain lowercase letters.")
+				fmt.Println(" Your guess must only contain lowercase letters.")
 				isValidInput = false
 				break CHECKALPHABETLOOP
 			} 

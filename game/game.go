@@ -43,11 +43,11 @@ func PlayGame(scanner *bufio.Scanner, number int, username string) []string {
 				failedString, correctMatch, alphabet = CheckWordle(guess, wordle, alphabet)
 				if correctMatch {
 					attempts = 6-i
-					fmt.Println("Congratulations! You've guessed the word correctly.")
+					fmt.Println("  Congratulations! You've guessed the word correctly.")
 					break GAMELOOP
 				} else {
 					fmt.Println("  Feedback: " + failedString)
-					fmt.Print("Remaining letters:")
+					fmt.Print("Remaining letters: ")
 					for _, c :=range alphabet {
 						fmt.Print(c + " ")
 					}

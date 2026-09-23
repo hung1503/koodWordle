@@ -9,23 +9,24 @@ import (
 
 
 func CheckDigits() (bool, int) {
-	isPass := true
 	arguments := os.Args
+	if len(os.Args) == 1 {
+		fmt.Println("Please provide a number as command line argument")
+		return false, -1
+	} else if len(arguments) > 2 {
+		fmt.Println("Invalid input! Enter one number")
+		return false, -1
+	}
 	number, err := strconv.Atoi(string(arguments[1]))
 	if err!=nil {
 		fmt.Println("Invalid command-line argument. Please launch with a valid number.")
-		isPass = false
-	} else if len(arguments) > 2 {
-		fmt.Println("Invalid input! Enter one number")
-		isPass = false
+		return false, -1
 	} else if number > 14854 {
 		fmt.Println("Invalid number! Enter smaller number")
-		isPass = false
-	} else if len(os.Args) == 1 {
-		fmt.Println("Please provide a number as command line argument")
-		isPass = false
+		return false, -1
 	}
-	return isPass, number
+	
+	return true, number
 }
 
 func HandleCSVFile() [][]string {

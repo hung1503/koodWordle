@@ -13,7 +13,7 @@ import (
 func main() {
 	startTheGame, number := io.CheckDigits()
 	if startTheGame {
-		os.Stdout.WriteString("\x1b[3;J\x1b[H\x1b[2J")
+		// os.Stdout.WriteString("\x1b[3;J\x1b[H\x1b[2J")
 		fmt.Println("Enter your username:")
 		scanner := bufio.NewScanner(os.Stdin)
 

@@ -77,14 +77,15 @@ func main() {
 			
 		} 
 		fmt.Println("Press Enter to exit...")
-		for {
-			if scanner.Scan(){
-				input := scanner.Text()
-				if input == ""  || input == "\n"{
-					os.Exit(0)
-				} 
-			} 
-		}
+		return
+		// for {
+		// 	if scanner.Scan(){
+		// 		input := scanner.Text()
+		// 		if input == ""  || input == "\n"{
+		// 			os.Exit(0)
+		// 		} 
+		// 	} 
+		// }
 	}
 }
 

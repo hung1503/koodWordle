@@ -43,7 +43,7 @@ func PlayGame(scanner *bufio.Scanner, number int, username string) []string {
 				failedString, correctMatch, alphabet = CheckWordle(guess, wordle, alphabet)
 				if correctMatch {
 					attempts = 6-i
-					fmt.Println("Congratulations! You've guessd the word correctly")
+					fmt.Println("Congratulations! You've guessed the word correctly.")
 					break GAMELOOP
 				} else {
 					fmt.Println(" Feedback: " + failedString)
@@ -92,7 +92,8 @@ func IsGuessValid(input string, wordlist []string) (bool) {
 				break CHECKALPHABETLOOP
 			} 
 		}
-	} else if !slices.Contains(wordlist, input) {
+	} 
+	if !slices.Contains(wordlist, input) {
 		fmt.Println("Word not in list. Please enter a valid word.")
 		isValidInput = false
 	}

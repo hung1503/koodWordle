@@ -61,7 +61,7 @@ func PlayGame(scanner *bufio.Scanner, number int, username string) []string {
 	if correctMatch {
 		return []string{username, wordle, strconv.Itoa(attempts), "win"}
 	} else {
-		fmt.Println("Game over. The correct word was: " + wordle)
+		fmt.Print("Game over. The correct word was: " + wordle)
 		return []string{username, wordle, strconv.Itoa(attempts), "loss"}
 	}
 }

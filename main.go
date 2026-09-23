@@ -52,8 +52,7 @@ func main() {
 				if err != nil {
 					fmt.Println("Error with saving game stat in CSV file")
 				}
-				STATSLOOP:	
-				for {
+			
 					fmt.Print("Do you want to see your stats? (yes/no):")
 					if scanner.Scan() {
 						answer := strings.TrimSpace(scanner.Text())
@@ -64,15 +63,15 @@ func main() {
 							fmt.Println("Game played:", gameCount)
 							fmt.Println("Game won:", winCount)
 							fmt.Println("Average attempts per game:", aveAttemps)
-							break STATSLOOP
+							break OUTERLOOP
 						} else {
-							break STATSLOOP
+							break OUTERLOOP
 						}
 					} else {
 						fmt.Println("Exiting program...")
 						os.Exit(0)
 					}
-				}
+				
 			}
 			
 		} 

@@ -52,7 +52,7 @@ func SaveToCSVFile(stat []string, csvFile [][]string) error {
 	content := strings.Join(stat, ",")
 	 _, er := f.WriteString("\n"+content)
 	 if er != nil {
-		panic(err)
+		panic(er)
 	}
 	return er
 }

@@ -89,11 +89,12 @@ func IsGuessValid(input string, wordlist []string) (bool) {
 			if !(r >= 'a' && r <= 'z') {
 				fmt.Println(" Your guess must only contain lowercase letters.")
 				isValidInput = false
+				checkAlphabet = false
 				break CHECKALPHABETLOOP
 			} 
 		}
 	} 
-	if !slices.Contains(wordlist, input) {
+	if checkAlphabet && !slices.Contains(wordlist, input) {
 		fmt.Println("Word not in list. Please enter a valid word.")
 		isValidInput = false
 	}

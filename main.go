@@ -26,6 +26,7 @@ func main() {
 				fmt.Print("Invalid word number.\n")
 				gameStart=false
 				enterUsername= false
+				return
 			}
 			if enterUsername {
 				USERNAMELOOP:

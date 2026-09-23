@@ -78,7 +78,7 @@ func main() {
 			for {
 				if scanner.Scan(){
 					input := scanner.Text()
-					if input == "" {
+					if input == ""  || input == "\n"{
 						os.Exit(0)
 					} 
 				} 

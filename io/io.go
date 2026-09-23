@@ -40,7 +40,7 @@ func HandleCSVFile() [][]string {
 func SaveToCSVFile(stat []string, csvFile [][]string) error {
 	f, err := os.OpenFile("stats.csv", os.O_APPEND|os.O_WRONLY, 0644)
 	 if err != nil {
-		panic(er)
+		panic(err)
 	}
 	defer f.Close()
 	content := strings.Join(stat, ",")

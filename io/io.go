@@ -30,10 +30,10 @@ func CheckDigits() (bool, int) {
 }
 
 func HandleCSVFile() [][]string {
-	content, err := os.ReadFile("stats.csv")
-	if err != nil {
-		fmt.Println("Error when reading stat file:", err)
-	}
+	content, _ := os.ReadFile("stats.csv")
+	// if err != nil {
+	// 	fmt.Println("Error when reading stat file:", err)
+	// }
 	statsArr := strings.Split(string(content), "\n")
 	filteredStatsArr := [][]string{}
 	for _, value :=range statsArr {
@@ -44,10 +44,10 @@ func HandleCSVFile() [][]string {
 }
 
 func SaveToCSVFile(stat []string, csvFile [][]string) error {
-	f, err := os.OpenFile("stats.csv", os.O_APPEND|os.O_WRONLY, 0600)
-	if err != nil {
-		panic(err)
-	}
+	f, _ := os.OpenFile("stats.csv", os.O_APPEND|os.O_WRONLY, 0600)
+	// if err != nil {
+	// 	panic(err)
+	// }
 	defer f.Close()
 	content := strings.Join(stat, ",")
 	 _, er := f.WriteString("\n"+content)

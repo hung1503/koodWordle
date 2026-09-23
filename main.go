@@ -40,7 +40,7 @@ func main() {
 						}
 					} else {
 						gameStart=false
-						break OUTERLOOP
+						return
 					}
 				}
 			}

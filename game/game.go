@@ -33,7 +33,7 @@ func PlayGame(scanner *bufio.Scanner, number int, username string) []string {
 	fmt.Print("Welcome to Wordle! Guess the 5-letter word.\n")
 	GAMELOOP:
 	for i:=5; i>=0; i--{
-		fmt.Print("Enter your guess: ")
+		fmt.Print("Enter your guess:")
 		if scanner.Scan(){
 			guess:= strings.TrimSpace(scanner.Text())
 			isValid := IsGuessValid(guess, wordlist)

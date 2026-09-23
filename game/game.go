@@ -56,7 +56,7 @@ func PlayGame(scanner *bufio.Scanner, number int, username string) []string {
 				
 			}
 		} else {
-			os.exit(0)
+			os.Exit(0)
 		}
 	}
 	

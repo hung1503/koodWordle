@@ -30,10 +30,10 @@ func PlayGame(scanner *bufio.Scanner, number int, username string) []string {
 	alphabet := []string{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
 	failedString := ""
 	correctMatch := false
-	fmt.Print("Welcome to Wordle! Guess the 5-letter word.\n")
+	fmt.Print("Welcome to Wordle! Guess the 5-letter word.")
 	GAMELOOP:
 	for i:=5; i>=0; i--{
-		fmt.Print("Enter your guess:")
+		fmt.Println("Enter your guess:")
 		if scanner.Scan(){
 			guess:= strings.TrimSpace(scanner.Text())
 			isValid := IsGuessValid(guess, wordlist)

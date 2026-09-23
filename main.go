@@ -53,24 +53,25 @@ func main() {
 					fmt.Println("Error with saving game stat in CSV file")
 				}
 			
-				fmt.Print("Do you want to see your stats? (yes/no): ")
-				if scanner.Scan() {
-					answer := strings.TrimSpace(scanner.Text())
-					if answer == "yes" || answer == "y" {
-						// csvFile := handleCSVFile()
-						gameCount, winCount, aveAttemps :=user.CheckStats(csvFile, username)
-						fmt.Println("Stat for " + username + ":" )
-						fmt.Println("Game played:", gameCount)
-						fmt.Println("Game won:", winCount)
-						fmt.Println("Average attempts per game:", aveAttemps)
-						break OUTERLOOP
+				for {
+					fmt.Print("Do you want to see your stats? (yes/no): ")
+					if scanner.Scan() {
+						answer := strings.TrimSpace(scanner.Text())
+						if answer == "yes" || answer == "y" {
+							// csvFile := handleCSVFile()
+							gameCount, winCount, aveAttemps :=user.CheckStats(csvFile, username)
+							fmt.Println("Stat for " + username + ":" )
+							fmt.Println("Game played:", gameCount)
+							fmt.Println("Game won:", winCount)
+							fmt.Println("Average attempts per game:", aveAttemps)
+							break OUTERLOOP
+						} else {
+							break OUTERLOOP
+						}
 					} else {
 						break OUTERLOOP
 					}
-				} else {
-					fmt.Println("Exiting program...")
-					os.Exit(0)
-				}
+				} 
 			}
 		} 
 		fmt.Println("Press Enter to exit...")

@@ -33,7 +33,7 @@ func PlayGame(scanner *bufio.Scanner, number int, username string) []string {
 	fmt.Println("Welcome to Wordle! Guess the 5-letter word.")
 	GAMELOOP:
 	for i:=5; i>=0; i--{
-		fmt.Print("Enter your guess:")
+		fmt.Print("Enter your guess:  ") 
 		if scanner.Scan(){
 			guess:= strings.TrimSpace(scanner.Text())
 			isValid := IsGuessValid(guess, wordlist)
@@ -43,10 +43,10 @@ func PlayGame(scanner *bufio.Scanner, number int, username string) []string {
 				failedString, correctMatch, alphabet = CheckWordle(guess, wordle, alphabet)
 				if correctMatch {
 					attempts = 6-i
-					fmt.Println("  Congratulations! You've guessed the word correctly.")
+					fmt.Println("Congratulations! You've guessed the word correctly.")
 					break GAMELOOP
 				} else {
-					fmt.Println("  Feedback: " + failedString)
+					fmt.Println("Feedback: " + failedString)
 					fmt.Print("Remaining letters: ")
 					for _, c :=range alphabet {
 						fmt.Print(c + " ")
@@ -82,14 +82,14 @@ func IsGuessValid(input string, wordlist []string) (bool) {
 	isValidInput:= true
 	checkLength:=true
 	if len(input) !=5 {
-		fmt.Println("  Your guess must be exactly 5 letters long.")
+		fmt.Println("Your guess must be exactly 5 letters long.")
 		isValidInput = false
 		checkLength = false
 	} else if checkAlphabet {
 		CHECKALPHABETLOOP:
 		for _, r:=range input {
 			if !(r >= 'a' && r <= 'z') {
-				fmt.Println("  Your guess must only contain lowercase letters.")
+				fmt.Println("Your guess must only contain lowercase letters.")
 				isValidInput = false
 				checkAlphabet = false
 				break CHECKALPHABETLOOP
@@ -97,7 +97,7 @@ func IsGuessValid(input string, wordlist []string) (bool) {
 		}
 	} 
 	if checkLength && checkAlphabet && !slices.Contains(wordlist, input) {
-		fmt.Println("  Word not in list. Please enter a valid word.")
+		fmt.Println("Word not in list. Please enter a valid word.")
 		isValidInput = false
 	}
 	return isValidInput

@@ -38,13 +38,18 @@ func HandleCSVFile() [][]string {
 }
 
 func SaveToCSVFile(stat []string, csvFile [][]string) error {
-	f, err := os.OpenFile("stats.csv", os.O_APPEND|os.O_WRONLY, 0644)
+	f, err := os.OpenFile("stats.csv", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
 	 if err != nil {
 		panic(err)
 	}
 	defer f.Close()
-	content := strings.Join(stat, ",")
-	 _, er := f.WriteString("\n"+content)
+	savedFile:=[]string{}
+	for _, r:=range csvFile {
+		content := strings.Join(r, ",")
+		savedFile = append(savedFile, content)
+	}
+	file := strings.Join(savedFile, "\n")
+	er := os.WriteFile("stats.csv", []byte(file), 0644)
 	if er != nil {
 		panic(er)
 	}

@@ -32,7 +32,7 @@ func main() {
 				USERNAMELOOP:
 				for{
 					if scanner.Scan(){
-						username := strings.TrimSpace(scanner.Text())
+						username = strings.TrimSpace(scanner.Text())
 						if len(username) == 0 {
 						fmt.Println("Invalid username! Please try again")
 						} else {
@@ -47,8 +47,8 @@ func main() {
 			if gameStart {	
 				csvFile := io.HandleCSVFile()
 				matchStats := game.PlayGame(scanner, number, username)
-				err := io.SaveToCSVFile(matchStats, csvFile)
 				csvFile = append(csvFile, matchStats)
+				err := io.SaveToCSVFile(matchStats, csvFile)
 				if err != nil {
 					fmt.Println("Error with saving game stat in CSV file")
 				}
@@ -74,15 +74,12 @@ func main() {
 			}
 		} 
 		fmt.Println("Press Enter to exit...")
-		return
-		// for {
-		// 	if scanner.Scan(){
-		// 		input := scanner.Text()
-		// 		if input == ""  || input == "\n"{
-		// 			os.Exit(0)
-		// 		} 
-		// 	} 
-		// }
+		if scanner.Scan(){
+			os.Exit(0)
+		} else {
+			os.Exit(0)
+		}
+		
 	}
 }
 

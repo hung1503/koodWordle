@@ -100,7 +100,7 @@ func IsGuessValid(input string, wordlist []string) (bool) {
 func CheckWordle(input string, wordle string, alphabet []string) (string, bool, []string) {
 	Green := "\033[32m"
 	Yellow := "\033[33m"
-	White := "\033[97m"
+	Gray := "\033[37m"
 	Reset := "\033[0m"
 
 	correctMatch := false
@@ -119,7 +119,7 @@ func CheckWordle(input string, wordle string, alphabet []string) (string, bool, 
 					testStr += Yellow + strings.ToUpper(inputArr[j]) + Reset
 				}
 			} else {
-				testStr += White + strings.ToUpper(inputArr[j]) + Reset
+				testStr += Gray + strings.ToUpper(inputArr[j]) + Reset
 				indexInAlphabet := slices.Index(alphabet, strings.ToUpper(inputArr[j]))
 				if indexInAlphabet >=0 {
 					alphabet = append(alphabet[:indexInAlphabet], alphabet[indexInAlphabet+1:]...)

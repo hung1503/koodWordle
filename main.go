@@ -61,8 +61,8 @@ func main() {
 							// csvFile := handleCSVFile()
 							gameCount, winCount, aveAttemps :=user.CheckStats(csvFile, username)
 							fmt.Println("Stats for " + username + ":" )
-							fmt.Println("Game played:", gameCount)
-							fmt.Println("Game won:", winCount)
+							fmt.Println("Games played:", gameCount)
+							fmt.Println("Games won:", winCount)
 							fmt.Printf("Average attempts per game: %.2f\n", aveAttemps)
 							break OUTERLOOP
 						} else {

@@ -28,11 +28,10 @@ func main() {
 				enterUsername= false
 			}
 			if enterUsername {
-				username = strings.TrimSpace(scanner.Text())
 				USERNAMELOOP:
 				for{
 					if scanner.Scan(){
-						username = strings.TrimSpace(scanner.Text())
+						username := strings.TrimSpace(scanner.Text())
 						if len(username) == 0 {
 						fmt.Println("Invalid username! Please try again")
 						} else {

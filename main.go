@@ -63,10 +63,10 @@ func main() {
 							fmt.Println("Stat for " + username + ":" )
 							fmt.Println("Game played:", gameCount)
 							fmt.Println("Game won:", winCount)
-							fmt.Println("Average attempts per game:", aveAttemps)
+							fmt.Printf("Average attempts per game: %.2f\n", aveAttemps)
 							break OUTERLOOP
 						} else {
-							return
+							break OUTERLOOP
 						}
 					} else {
 						return

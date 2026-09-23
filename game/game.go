@@ -41,8 +41,8 @@ func PlayGame(scanner *bufio.Scanner, number int, username string) []string {
 				i = i+1
 			} else {
 				failedString, correctMatch, alphabet = CheckWordle(guess, wordle, alphabet)
+				attempts = 6-i
 				if correctMatch {
-					attempts = 6-i
 					fmt.Println("Congratulations! You've guessed the word correctly.")
 					break GAMELOOP
 				} else {
@@ -63,7 +63,7 @@ func PlayGame(scanner *bufio.Scanner, number int, username string) []string {
 	if correctMatch {
 		return []string{username, wordle, strconv.Itoa(attempts), "win"}
 	} else {
-		fmt.Print("Game over. The correct word was: " + wordle)
+		fmt.Print("Game over. The correct word was: " + wordle + "\n")
 		return []string{username, wordle, strconv.Itoa(attempts), "loss"}
 	}
 }
